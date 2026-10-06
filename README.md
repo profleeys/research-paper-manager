@@ -29,7 +29,35 @@
 
 ---
 
-## 🚀 快速啟動指南 (How to Run)
+## ☁️ Render.com 雲端部屬指南 (Deployment on Render)
+
+本專案已完成 Render 最佳化，後端具備 SPA 路由轉發與靜態資源託管，只需**建立一個 Web Service** 即可同時運行前端與後端，完全相容 Render 免費方案。
+
+### 方式一：使用 Render Blueprint 自動部屬 (推薦)
+1. 登入 [Render Dashboard](https://dashboard.render.com/)。
+2. 點擊右上角 **New +** 選擇 **Blueprint**。
+3. 連結您的 GitHub 儲存庫 `research-paper-manager`。
+4. Render 會自動讀取專案內的 `render.yaml` 設定檔，點擊 **Apply** 即可自動完成建置與上線！
+
+### 方式二：手動建立 Web Service
+1. 登入 [Render Dashboard](https://dashboard.render.com/)，點擊 **New +** 選擇 **Web Service**。
+2. 連結 GitHub 儲存庫 `research-paper-manager`。
+3. 設定參數如下：
+   - **Name**: `research-paper-manager` (或自訂名稱)
+   - **Language**: `Node`
+   - **Branch**: `main`
+   - **Region**: 任意 (例如 `Oregon (US West)` 或 `Singapore`)
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+   - **Plan**: `Free`
+4. 新增環境變數 (Environment Variables)：
+   - `NODE_ENV`: `production`
+   - `JWT_SECRET`: 自訂一段隨機字串 (例如 `my-super-secret-render-key-2026`)
+5. 點擊 **Create Web Service**，等待 2~3 分鐘建置完成即可透過 Render 給予的網址訪問！
+
+---
+
+## 🚀 本地快速啟動指南 (Local Run)
 
 ### 1. 安裝相依套件 (若未安裝)
 ```bash
@@ -73,4 +101,3 @@ node test-flow.js
 - 多租戶使用者資料隔離檢驗
 - 論文新增、列表、關鍵字搜尋、多條件篩選
 - 論文詳情查詢、修改、刪除
-

@@ -23,10 +23,31 @@ seedDatabase();
 app.use('/api/auth', authRoutes);
 app.use('/api/papers', paperRoutes);
 
+const path = require('node:path');
+const fs = require('node:fs');
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'Research Paper Manager Backend', timestamp: new Date().toISOString() });
 });
+
+// Serve frontend static assets if dist exists (for production deployment on Render)
+const frontendDistPath = path.resolve(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+
+  // SPA fallback for React Router
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    const indexPath = path.join(frontendDistPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
+    }
+    next();
+  });
+}
 
 // Error handling fallback
 app.use((err, req, res, next) => {
